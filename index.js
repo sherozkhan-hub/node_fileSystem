@@ -3,6 +3,12 @@ const fs = require("fs");
 const app = express();
 const port = 900;
 
+// Add this line below the other require statements
+const ejs = require("ejs");
+
+// Set the view engine to EJS
+app.set("view engine", "ejs");
+
 app.use(express.json());
 
 // Creating user
@@ -42,7 +48,11 @@ app.get("/display", (req, res) => {
         res.status(500).send("Error reading the file");
         return;
       }
-      res.status(200).json(JSON.parse(data));
+
+      const users = JSON.parse(data);
+
+      // Render the 'display' view, passing the users data to the template
+      res.render("display", { users: users });
     });
   } catch (error) {
     res.status(400).send("Invalid request");
